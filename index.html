@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Love Page ❤️</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ffe6e6, #ffd6e0);
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            margin-top: 100px;
+        }
+
+        h1 {
+            color: #ff3366;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        button {
+            padding: 12px 25px;
+            font-size: 18px;
+            margin: 10px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #yesBtn {
+            background: #28a745;
+            color: white;
+        }
+
+        #yesBtn:hover {
+            transform: scale(1.1);
+        }
+
+        #noBtn {
+            background: #dc3545;
+            color: white;
+            position: absolute;
+        }
+
+        .hide {
+            animation: fadeOut 0.5s forwards;
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+        }
+
+        /* ✅ BIG CARD FIX */
+        #letter {
+            display: none;
+            background: white;
+            padding: 30px;
+            /* 👈 more space */
+            width: 380px;
+            /* 👈 bigger width */
+            min-height: 300px;
+            /* 👈 no shrink feel */
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+            transform: scale(0);
+            transition: 0.5s;
+        }
+
+        #letter.show {
+            display: block;
+            transform: scale(1);
+        }
+
+        /* ✅ TEXT SPACING FIX */
+        #text {
+            line-height: 1.8;
+            /* 👈 line gap */
+            font-size: 16px;
+            text-align: left;
+            /* 👈 better look */
+            white-space: pre-line;
+        }
+
+        /* Typing */
+        .typing {
+            border-right: 2px solid black;
+            animation: blink 0.7s infinite;
+        }
+
+        @keyframes blink {
+            50% {
+                border-color: transparent;
+            }
+        }
+
+        .heart {
+            position: absolute;
+            color: red;
+            font-size: 20px;
+            animation: float 4s linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-600px);
+                opacity: 0;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Do you love me? ❤️</h1>
+
+        <div style="display: flex; justify-content: center; gap: 20px;margin-right: 150px;">
+            <button id="yesBtn">Yes 😍</button>
+            <button id="noBtn" style="margin-left: 300px;">No 😢</button>
+        </div>
+
+        <div id="letter">
+            <p id="text"></p>
+        </div>
+
+        <audio id="loveSong" src="song.mp3" loop></audio>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById("noBtn");
+        const yesBtn = document.getElementById("yesBtn");
+        const letter = document.getElementById("letter");
+        const song = document.getElementById("loveSong");
+        const text = document.getElementById("text");
+
+        function moveNoButton() {
+            const x = Math.random() * (window.innerWidth - 120);
+            const y = Math.random() * (window.innerHeight - 80);
+
+            noBtn.style.left = x + "px";
+            noBtn.style.top = y + "px";
+        }
+
+        noBtn.addEventListener("mouseover", moveNoButton);
+        noBtn.addEventListener("click", moveNoButton);
+
+        yesBtn.addEventListener("click", () => {
+            yesBtn.classList.add("hide");
+            noBtn.classList.add("hide");
+
+            setTimeout(() => {
+                letter.classList.add("show");
+                typeLetter();
+            }, 500);
+
+            song.play().catch(() => { });
+            createHearts();
+        });
+
+        const message = `Dear ❤️,
+
+Jab se tum meri life me aaye ho, sab kuch better lagne laga hai.
+
+Sach kahu to mujhe pata hi nahi chala kab tum itne important ban gaye.
+Tumhari har choti si baat bhi mujhe khush kar deti hai.
+
+Main bas tumhare saath apni puri life spend karna chahta hoon ❤️
+Tum sirf meri khushi nahi,
+tum meri aadat ban chuke ho.
+
+Tum meri life ka wo hissa ho jise main kabhi khona nahi chahta.
+Tum mere liye bahut special ho ❤️
+
+I love you more than anything ❤️
+
+Tumhara hamsafar ❤️`;
+
+        function typeLetter() {
+            let i = 0;
+            text.classList.add("typing");
+            text.textContent = "";
+
+            const interval = setInterval(() => {
+                text.textContent += message.charAt(i);
+                i++;
+
+                if (i >= message.length) {
+                    clearInterval(interval);
+                    text.classList.remove("typing");
+                }
+            }, 20);
+        }
+
+        function createHearts() {
+            let count = 0;
+
+            const interval = setInterval(() => {
+                const heart = document.createElement("div");
+                heart.classList.add("heart");
+                heart.innerHTML = "❤️";
+
+                heart.style.left = Math.random() * window.innerWidth + "px";
+                heart.style.top = "100%";
+
+                document.body.appendChild(heart);
+
+                setTimeout(() => {
+                    heart.remove();
+                }, 4000);
+
+                count++;
+                if (count > 40) clearInterval(interval);
+            }, 200);
+        }
+    </script>
+
+</body>
+
+</html>
